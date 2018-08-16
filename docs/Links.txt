@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 https://www.abatchy.com/2017/05/jumping-to-shellcode.html
 
 http://www.dmi.unipg.it/bista/didattica/sicurezza-pg/buffer-overrun/hacking-book/0x2a0-writing_shellcode.html
@@ -17,3 +18,24 @@ http://www.cis.syr.edu/~wedu/Teaching/CompSec/LectureNotes_New/Buffer_Overflow.p
 http://ethesis.nitrkl.ac.in/4170/1/Buffer_Overflow_Attacks_%26_Countermeasures.pdf
 
 https://dhavalkapil.com/blogs/Shellcode-Injection/
+=======
+https://www.abatchy.com/2017/05/jumping-to-shellcode.html
+
+http://www.dmi.unipg.it/bista/didattica/sicurezza-pg/buffer-overrun/hacking-book/0x2a0-writing_shellcode.html
+
+https://samsclass.info/127/proj/seh.htm
+
+https://www.corelan.be/index.php/2009/07/19/exploit-writing-tutorial-part-1-stack-based-overflows/
+
+https://bytesoverbombs.io/exploiting-a-64-bit-buffer-overflow-469e8b500f10
+
+https://blog.techorganic.com/2015/04/10/64-bit-linux-stack-smashing-tutorial-part-1/
+
+https://www.tenouk.com/Bufferoverflowc/bufferoverflowvulexploitdemo32.html
+
+http://www.cis.syr.edu/~wedu/Teaching/CompSec/LectureNotes_New/Buffer_Overflow.pdf
+
+http://ethesis.nitrkl.ac.in/4170/1/Buffer_Overflow_Attacks_%26_Countermeasures.pdf
+
+https://dhavalkapil.com/blogs/Shellcode-Injection/
+>>>>>>> b9d3ed415777178279d005b9791114d7aa1a5200

