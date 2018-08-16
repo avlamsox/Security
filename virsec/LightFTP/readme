@@ -1,0 +1,12 @@
+How to setup LightFTP and test for Remote Exploitation
+- Only this version of LightFTP is vulnerable - there is a exploit for DOS, but not for RIP control
+- We will show 3 exploits here
+- Done Locally (With/Without GDB)
+- Shellcode in ENVAR
+- ASLR Enabled ?
+- NX Enabled ?
+
+-
+- Ubuntu 17 server
+- Kali is exploit machine
+- Run make in source code of LightFTP/Source/Other/Release
