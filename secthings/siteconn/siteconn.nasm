@@ -11,6 +11,7 @@ section .bss
 	sock resw 2
 	client resw 2
 	port resw 2
+	bytes_read resw 2
 
 section .data
 	pop_sa istruc sockaddr_in
@@ -58,8 +59,16 @@ _connect:
 	mov rsi, pop_sa
 	mov rdx, sockaddr_in_len
 	syscall
-	
+
 	ret
+_fcopy:
+	mov rax, 45
+	mov rdi, [sock]
+	mov rsi, 
+	mov rdx, 8092
+	
+	syscall 
+	loop _fcopy	
 
 connect_to_site:
 	
@@ -68,6 +77,7 @@ connect_to_site:
 
 	;call connect API
 	call _connect
+	call _fcopy 
 
 	call exit_gracefully
 main:
