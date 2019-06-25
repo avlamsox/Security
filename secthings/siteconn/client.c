@@ -82,7 +82,7 @@
 
 	}
 
-        printf("Received in pid=%d, text=: %s \n",getpid(), buf);
+        printf("Received in pid=%d, text=: %s [%d] bytes \n",getpid(), buf, numbytes);
 /*	ret = write(fp, &buf, numbytes);
 	printf("wrote %d bytes as %d\n",ret ,numbytes);
 	if (ret == -1) {

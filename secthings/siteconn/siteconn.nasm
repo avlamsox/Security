@@ -12,6 +12,7 @@ section .bss
 	client resw 2
 	port resw 2
 	bytes_read resw 2
+	file_buff resb 8092
 
 section .data
 	pop_sa istruc sockaddr_in
@@ -62,12 +63,22 @@ _connect:
 
 	ret
 _fcopy:
-	mov rax, 45
-	mov rdi, [sock]
-	mov rsi, 
-	mov rdx, 8092
-	
+	mov rax, 45 ; recvfrom syscall no
+	mov rdi, [sock] ; socket fd
+	lea rsi, [file_buff] ; buffer to copy
+	mov rdx, 8092 ; len to copy
+	mov r10, 0
+	mov r8, 0
+	mov r9, 0
 	syscall 
+	mov [bytes_read], rax	
+
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, [file_buff]
+	mov rdx, 8092
+	syscall
+
 	loop _fcopy	
 
 connect_to_site:
