@@ -13,6 +13,7 @@ section .bss
 	port resw 2
 	bytes_read resw 2
 	file_buff resb 8092
+	file_data resb 8092
 
 section .data
 	pop_sa istruc sockaddr_in
@@ -62,10 +63,20 @@ _connect:
 	syscall
 
 	ret
+
+print_data:
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, [file_data]
+	mov rdx, 8092
+	syscall
+	call exit_gracefully
+
 _fcopy:
 	mov rax, 45 ; recvfrom syscall no
 	mov rdi, [sock] ; socket fd
 	lea rsi, [file_buff] ; buffer to copy
+	mov [file_data], rsi
 	mov rdx, 8092 ; len to copy
 	mov r10, 0
 	mov r8, 0
@@ -73,11 +84,7 @@ _fcopy:
 	syscall 
 	mov [bytes_read], rax	
 
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, [file_buff]
-	mov rdx, 8092
-	syscall
+	jmp print_data
 
 	loop _fcopy	
 
