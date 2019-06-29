@@ -14,4 +14,5 @@ exec_new_program:
 	
 main:
 	call exec_new_program
-	program_name: db './x2st', 0x0
+	program_name: db './s2.py', 0x0
+	;program_name: db './x2st', 0x0

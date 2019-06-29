@@ -22,18 +22,18 @@ main:
 	mov [fd_out], rax
 
 	xor rax, rax
-	mov rax, 4
-	mov rbx , [fd_out]
-	mov rcx, file_data
+	mov rax, 1
+	mov rdi ,[fd_out]
+	lea rsi, [file_data]
 	mov rdx, data_len
 	syscall
 	
 	jmp exit_gracefully
 
 section .data
-	file_name db 'stage2.mlwr'
-	file_data db 'Hi I am stage2 malware'
-	data_len equ $-file_data
+	file_name db '/root/stage2.mlwr', 0x0 ;null termination is necessary
+	file_data db 'Hi I am stage2 malware', 0x0
+	data_len equ $-file_name
 
 section .bss
 	fd_out resw 1
